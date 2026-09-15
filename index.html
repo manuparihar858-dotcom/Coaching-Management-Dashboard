@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Coaching Management Dashboard</title>
+
+    <meta
+        name="description"
+        content="A modern coaching institute management dashboard template."
+    >
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar">
+
+        <div class="brand">
+            <div class="brand-badge">CM</div>
+
+            <div class="brand-info">
+                <strong>Coaching Manager</strong>
+                <span>Management System</span>
+            </div>
+        </div>
+
+        <nav>
+
+            <button class="nav-link active" onclick="switchTab('dashboard')">
+                <span>▦</span>
+                Dashboard
+            </button>
+
+            <button class="nav-link" onclick="switchTab('students')">
+                <span>♙</span>
+                Students
+            </button>
+
+            <button class="nav-link" onclick="switchTab('fees')">
+                <span>$</span>
+                Fee Tracking
+            </button>
+
+            <button class="nav-link" onclick="switchTab('attendance')">
+                <span>✓</span>
+                Attendance
+            </button>
+
+            <button class="nav-link" onclick="switchTab('enquiries')">
+                <span>○</span>
+                Enquiries
+            </button>
+
+        </nav>
+
+        <div class="sidebar-footer">
+
+            <div class="admin-profile">
+                <div class="admin-avatar">AD</div>
+
+                <div>
+                    <strong>Administrator</strong>
+                    <span>Admin Account</span>
+                </div>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main>
+
+        <!-- HEADER -->
+        <header>
+
+            <div class="header-left">
+
+                <button
+                    class="mobile-menu-toggle"
+                    onclick="toggleSidebar()"
+                >
+                    ☰
+                </button>
+
+                <div class="header-title">
+                    <h1 id="page-title">Dashboard Overview</h1>
+                    <p id="current-date"></p>
+                </div>
+
+            </div>
+
+            <button
+                class="btn"
+                onclick="openStudentModal()"
+            >
+                + Register Student
+            </button>
+
+        </header>
+
+
+        <div class="content-body">
+
+            <!-- STATISTICS -->
+            <section class="stats-grid">
+
+                <div class="stat-card">
+                    <span>Active Students</span>
+                    <strong id="stat-active-students">0</strong>
+                </div>
+
+                <div class="stat-card">
+                    <span>Total Fee Revenue</span>
+                    <strong id="stat-fee-collected">$0</strong>
+                </div>
+
+                <div class="stat-card">
+                    <span>Pending Fees</span>
+                    <strong id="stat-fee-pending">$0</strong>
+                </div>
+
+                <div class="stat-card">
+                    <span>Open Enquiries</span>
+                    <strong id="stat-open-enquiries">0</strong>
+                </div>
+
+            </section>
+
+
+            <!-- DASHBOARD TAB -->
+            <section
+                id="tab-dashboard"
+                class="tab-content active"
+            >
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h2>Recent Students</h2>
+                            <p>Recently enrolled students</p>
+                        </div>
+
+                        <button
+                            class="btn btn-secondary btn-sm"
+                            onclick="switchTab('students')"
+                        >
+                            View All
+                        </button>
+
+                    </div>
+
+                    <div class="table-container">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Student</th>
+                                    <th>Course / Batch</th>
+                                    <th>Phone</th>
+                                    <th>Fee Status</th>
+                                    <th>Attendance</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="overview-students-tbody"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h2>Active Follow-Ups</h2>
+                            <p>Enquiries that need attention</p>
+                        </div>
+
+                        <button
+                            class="btn btn-secondary btn-sm"
+                            onclick="switchTab('enquiries')"
+                        >
+                            Manage
+                        </button>
+
+                    </div>
+
+                    <div class="table-container">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Interested In</th>
+                                    <th>Phone</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="overview-enquiries-tbody"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- STUDENTS TAB -->
+            <section
+                id="tab-students"
+                class="tab-content"
+            >
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h2>Student Management</h2>
+                            <p>Manage enrolled students</p>
+                        </div>
+
+                        <div class="panel-controls">
+
+                            <input
+                                type="text"
+                                id="student-search-input"
+                                placeholder="Search students..."
+                                oninput="renderStudents()"
+                            >
+
+                            <button
+                                class="btn"
+                                onclick="openStudentModal()"
+                            >
+                                + Add Student
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="table-container">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Student Name</th>
+                                    <th>Course / Batch</th>
+                                    <th>Phone</th>
+                                    <th>Join Date</th>
+                                    <th>Fee Status</th>
+                                    <th>Actions</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="students-table-tbody"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- FEES TAB -->
+            <section
+                id="tab-fees"
+                class="tab-content"
+            >
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h2>Fee Records</h2>
+                            <p>Track tuition payments and balances</p>
+                        </div>
+
+                        <select
+                            id="fee-filter"
+                            onchange="renderFees()"
+                        >
+                            <option value="ALL">All Statuses</option>
+                            <option value="Paid">Paid</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Overdue">Overdue</option>
+                        </select>
+
+                    </div>
+
+                    <div class="table-container">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Student</th>
+                                    <th>Course</th>
+                                    <th>Total Fee</th>
+                                    <th>Paid</th>
+                                    <th>Balance</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="fee-table-tbody"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ATTENDANCE TAB -->
+            <section
+                id="tab-attendance"
+                class="tab-content"
+            >
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h2>Attendance Management</h2>
+                            <p>Record daily student attendance</p>
+                        </div>
+
+                        <div class="panel-controls">
+
+                            <input
+                                type="date"
+                                id="attendance-date"
+                            >
+
+                            <button
+                                class="btn btn-secondary btn-sm"
+                                onclick="markAllAttendance('Present')"
+                            >
+                                Mark All Present
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="table-container">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Student</th>
+                                    <th>Course</th>
+                                    <th>Overall Attendance</th>
+                                    <th>Today's Status</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="attendance-table-tbody"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ENQUIRIES TAB -->
+            <section
+                id="tab-enquiries"
+                class="tab-content"
+            >
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h2>Enquiry Management</h2>
+                            <p>Track prospective students and follow-ups</p>
+                        </div>
+
+                        <button
+                            class="btn"
+                            onclick="openEnquiryModal()"
+                        >
+                            + New Enquiry
+                        </button>
+
+                    </div>
+
+                    <div class="table-container">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Name</th>
+                                    <th>Course</th>
+                                    <th>Phone</th>
+                                    <th>Status</th>
+                                    <th>Update</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="enquiry-table-tbody"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <!-- ADD / EDIT STUDENT MODAL -->
+    <div
+        class="modal-overlay"
+        id="student-modal"
+    >
+
+        <div class="modal">
+
+            <div class="modal-header">
+
+                <div>
+                    <h3 id="student-modal-title">
+                        Register New Student
+                    </h3>
+
+                    <p>Add or update student information</p>
+                </div>
+
+                <button
+                    class="modal-close"
+                    onclick="closeModal('student-modal')"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <form
+                id="student-form"
+                onsubmit="handleSaveStudent(event)"
+            >
+
+                <div class="modal-body">
+
+                    <input
+                        type="hidden"
+                        id="student-edit-id"
+                    >
+
+                    <div class="form-group">
+
+                        <label>Student ID</label>
+
+                        <input
+                            type="text"
+                            id="student-roll"
+                            required
+                            placeholder="STU-101"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Full Name</label>
+
+                        <input
+                            type="text"
+                            id="student-name"
+                            required
+                            placeholder="John Smith"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Course / Batch</label>
+
+                        <input
+                            type="text"
+                            id="student-course"
+                            required
+                            placeholder="Mathematics - Class 12"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Phone Number</label>
+
+                        <input
+                            type="tel"
+                            id="student-phone"
+                            required
+                            placeholder="+1 555 123 4567"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Total Tuition Fee
+                        </label>
+
+                        <input
+                            type="number"
+                            id="student-total-fee"
+                            required
+                            min="0"
+                            value="1000"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Amount Already Paid
+                        </label>
+
+                        <input
+                            type="number"
+                            id="student-paid-fee"
+                            required
+                            min="0"
+                            value="0"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        onclick="closeModal('student-modal')"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn"
+                    >
+                        Save Student
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ENQUIRY MODAL -->
+    <div
+        class="modal-overlay"
+        id="enquiry-modal"
+    >
+
+        <div class="modal">
+
+            <div class="modal-header">
+
+                <div>
+                    <h3>New Enquiry</h3>
+                    <p>Add a prospective student</p>
+                </div>
+
+                <button
+                    class="modal-close"
+                    onclick="closeModal('enquiry-modal')"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <form
+                id="enquiry-form"
+                onsubmit="handleSaveEnquiry(event)"
+            >
+
+                <div class="modal-body">
+
+                    <div class="form-group">
+
+                        <label>Student Name</label>
+
+                        <input
+                            type="text"
+                            id="enquiry-name"
+                            required
+                            placeholder="Student name"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Interested Course</label>
+
+                        <input
+                            type="text"
+                            id="enquiry-course"
+                            required
+                            placeholder="Course or batch"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Phone Number</label>
+
+                        <input
+                            type="tel"
+                            id="enquiry-phone"
+                            required
+                            placeholder="+1 555 123 4567"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Notes</label>
+
+                        <textarea
+                            id="enquiry-notes"
+                            rows="4"
+                            placeholder="Additional information..."
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        onclick="closeModal('enquiry-modal')"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn"
+                    >
+                        Save Enquiry
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- STUDENT PROFILE MODAL -->
+    <div
+        class="modal-overlay"
+        id="profile-modal"
+    >
+
+        <div class="modal profile-modal">
+
+            <div class="modal-header">
+
+                <div>
+                    <h3>Student Profile</h3>
+                    <p>Student overview and account information</p>
+                </div>
+
+                <button
+                    class="modal-close"
+                    onclick="closeModal('profile-modal')"
+                >
+                    ×
+                </button>
+
+            </div>
+
+            <div
+                class="modal-body"
+                id="profile-modal-body"
+            ></div>
+
+            <div class="modal-footer">
+
+                <button
+                    class="btn btn-secondary"
+                    onclick="closeModal('profile-modal')"
+                >
+                    Close
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script src="app.js"></script>
+
+</body>
+</html>
